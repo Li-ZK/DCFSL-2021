@@ -61,14 +61,18 @@ TEST_EPISODE = args.test_episode
 LEARNING_RATE = args.learning_rate
 GPU = args.gpu
 HIDDEN_UNIT = args.hidden_unit
-ROOT = "/home/dell/lm/DCFSL"
 
 # Hyper Parameters in target domain data set
 TEST_CLASS_NUM = args.test_class_num # the number of class
 TEST_LSAMPLE_NUM_PER_CLASS = args.test_lsample_num_per_class # the number of labeled samples per class 5 4 3 2 1
 
 utils.same_seeds(0)
-
+def _init_():
+    if not os.path.exists('checkpoints'):
+        os.makedirs('checkpoints')
+    if not os.path.exists('classificationMap'):
+        os.makedirs('classificationMap')
+_init_()
 # load source domain data set
 with open(os.path.join('datasets',  'Chikusei_imdb_128.pickle'), 'rb') as handle:
     source_imdb = pickle.load(handle)
@@ -617,7 +621,7 @@ for iDataSet in range(nDataSet):
             feature_encoder.train()
             if test_accuracy > last_accuracy:
                 # save networks
-                torch.save(feature_encoder.state_dict(),str(ROOT + "/checkpoints/DFSL_feature_encoder_" + "salinas_" +str(iDataSet) +"iter_" + str(TEST_LSAMPLE_NUM_PER_CLASS) +"shot.pkl"))
+                torch.save(feature_encoder.state_dict(),str("checkpoints/DFSL_feature_encoder_" + "salinas_" +str(iDataSet) +"iter_" + str(TEST_LSAMPLE_NUM_PER_CLASS) +"shot.pkl"))
                 print("save networks for episode:",episode+1)
                 last_accuracy = test_accuracy
                 best_episdoe = episode
@@ -710,4 +714,4 @@ for i in range(best_G.shape[0]):
         if best_G[i][j] == 16:
             hsi_pic[i, j, :] = [0.5, 0.75, 1]
 
-utils.classification_map(hsi_pic[4:-4, 4:-4, :], best_G[4:-4, 4:-4], 24, ROOT + "/classificationMap/salinas_{}shot.png".format(TEST_LSAMPLE_NUM_PER_CLASS))
+utils.classification_map(hsi_pic[4:-4, 4:-4, :], best_G[4:-4, 4:-4], 24,  "classificationMap/salinas_{}shot.png".format(TEST_LSAMPLE_NUM_PER_CLASS))
