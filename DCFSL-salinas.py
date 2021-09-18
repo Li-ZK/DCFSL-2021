@@ -43,7 +43,7 @@ parser.add_argument("-l","--learning_rate", type = float, default = 0.001)
 parser.add_argument("-g","--gpu",type=int, default=0)
 parser.add_argument("-u","--hidden_unit",type=int,default=10)
 # target
-parser.add_argument("-m","--test_class_num",type=int, default=9)
+parser.add_argument("-m","--test_class_num",type=int, default=16)
 parser.add_argument("-z","--test_lsample_num_per_class",type=int,default=5, help='5 4 3 2 1')
 
 args = parser.parse_args(args=[])
